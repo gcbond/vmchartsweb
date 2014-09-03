@@ -1,0 +1,57 @@
+<head>
+   <title>Google Chart Example</title>
+   <script src="https://www.google.com/jsapi"></script>
+   <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+   <script src="https://jquery-csv.googlecode.com/files/jquery.csv-0.71.js"></script>
+   <script type='text/javascript'>
+   // load the visualization library from Google and set a listener
+   google.load("visualization", "1", {packages:["corechart"]});
+   google.setOnLoadCallback(drawChartfromCSV);
+   google.setOnLoadCallback(drawChartfromCSV2);
+  
+   function drawChartfromCSV(){
+     // grab the CSV
+         $.get("localhost.csv", function(csvString) {
+         // transform the CSV string into a 2-dimensional array
+            var arrayData = $.csv.toArrays(csvString, {onParseValue: $.csv.hooks.castToScalar});
+         // this new DataTable object holds all the data
+            var data = new google.visualization.arrayToDataTable(arrayData);
+         // this view can select a subset of the data at a time
+            var view = new google.visualization.DataView(data);
+            view.setColumns([0,3]);
+         var options = {
+         title: "VM Summary",
+          hAxis: {title: data.getColumnLabel(3), minValue: data.getColumnRange(3).min, maxValue: data.getColumnRange(3).max},
+          vAxis: {title: data.getColumnLabel(0), minValue: data.getColumnRange(0).min, maxValue: data.getColumnRange(0).max},
+          legend: 'none'
+          };
+          var chart = new google.visualization.BarChart(document.getElementById('csv2chart'));
+          chart.draw(view, options);
+         });
+   }
+   function drawChartfromCSV2(){
+     // grab the CSV
+         $.get("localhost-total.csv", function(csvString) {
+         // transform the CSV string into a 2-dimensional array
+            var arrayData = $.csv.toArrays(csvString, {onParseValue: $.csv.hooks.castToScalar});
+         // this new DataTable object holds all the data
+            var data = new google.visualization.arrayToDataTable(arrayData);
+         // this view can select a subset of the data at a time
+            var view = new google.visualization.DataView(data);
+            view.setColumns([0,3]);
+         var options = {
+         title: "VM Summary",
+          hAxis: {title: data.getColumnLabel(3), minValue: data.getColumnRange(3).min, maxValue: data.getColumnRange(3).max},
+          vAxis: {title: data.getColumnLabel(0), minValue: data.getColumnRange(0).min, maxValue: data.getColumnRange(0).max},
+          legend: 'none'
+          };
+          var chart = new google.visualization.ColumnChart(document.getElementById('csv2chart2'));
+          chart.draw(view, options);
+         });
+   }
+   </script>
+</head>
+<body>
+   <div id="csv2chart" style="width: 900px; height: 900px;"> </div>
+   <div id="csv2chart2" style="width: 900px; height: 500px;"> </div> 
+</body>
